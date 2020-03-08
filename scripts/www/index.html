@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <title>WLAN scanner</title>
+    <script type="application/javascript">
+    function loadDoc() {
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          var wlans = JSON.parse(this.responseText);
+          var table = "<table class=\"table table-sm table-hover table-striped\"><tr><th scope=\"col\">SSID</th><th scope=\"col\">channel</th><th scope=\"col\">RSSI</th></tr>\n";
+          for (var n of wlans) {
+            table = table + "<tr><td>" + n.ssid + "</td><td>" + n.channel + "</td><td>" + n.rssi + "</td></tr>\n";
+          }
+          table = table + "</table>";
+          document.getElementById("networks").innerHTML = table;
+        }
+      };
+      // document.getElementById("networks").innerHTML = 'Scanning...';
+      xhttp.open("GET", "/wlan/scan", true);
+      xhttp.send();
+    }
+
+    window.setInterval(loadDoc, 20000);
+    </script>
+  </head>
+  <body onload="loadDoc()">
+    <div class="container-fluid">
+		  <div class="row justify-content-md-center">
+		    <div class="col-sm text-center">
+		        <h1>WLAN scanner</h1>
+        </div>
+      </div>
+      <div class="row justify-content-center">
+		    <div id="networks" class="col-md-auto table-responsive text-center"></div>
+        </div>
+      </div>
+      <!-- <div class="row">
+	        <div class="col text-center">
+            <button type="button" class="btn btn-primary" onclick="enableScan()">Scan</button>
+          </div>
+      </div> -->
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="js/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="js/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  </body>
+</html>

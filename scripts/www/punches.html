@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <title>SI punches</title>
+    <script type="application/javascript">
+    function loadPunches() {
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          var punches = JSON.parse(this.responseText);
+          var table = "<table class=\"table table-sm table-hover table-striped\"><tr><th scope=\"col\">Time</th><th scope=\"col\">SI-Card Number</th><th scope=\"col\">Station Code Number</th></tr>\n";
+          for (var p of punches) {
+            table = table + "<tr><td>" + p.time + "</td><td>" + p.SN + "</td><td>" + p.CN + "</td></tr>\n";
+          }
+          table = table + "</table>";
+          document.getElementById("punches").innerHTML = table;
+        }
+      };
+      // document.getElementById("networks").innerHTML = 'Scanning...';
+      xhttp.open("GET", "/sipy/punches", true);
+      xhttp.send();
+    }
+
+    window.setInterval(loadPunches, 10000);
+    </script>
+  </head>
+  <body onload="loadPunches()">
+    <div class="container-fluid">
+		  <div class="row justify-content-md-center">
+		    <div class="col-sm text-center">
+		        <h1>SI punches logbook</h1>
+        </div>
+      </div>
+      <div class="row justify-content-center">
+		    <div id="punches" class="col-md-auto table-responsive text-center"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="js/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="js/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  </body>
+</html>

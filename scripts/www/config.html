@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+  <title>SRR LoPy configuration</title>
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="row justify-content-md-center">
+      <div class="col-sm text-center">
+        <h1>SRR LoPy configuration</h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <h4>WiFi</h4>
+      </div>
+    </div>
+    <form>
+      <div class="form-group">
+        <label for="wifiMode">WiFi mode</label>
+        <select class="form-control" id="wifiMode">
+          <option>Access Point</option>
+          <option>Station</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="wifiSSID">WiFi SSID</label>
+        <input type="text" class="form-control" id="wifiSSID" placeholder="Nounette">
+      </div>
+      <div class="form-group">
+        <label for="wifiPassword">WiFi SSID</label>
+        <input type="text" class="form-control" id="wifiPassword" placeholder="~vHff4uvJ}*C(7(n">
+      </div>
+      <div class="row">
+        <div class="col">
+          <h4>Serveur MeOS</h4>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="server">Adresse du serveur</label>
+        <input type="text" class="form-control" id="server" aria-describedby="serverHelp">
+        <small id="serverHelp" class="form-text text-muted">Adresse DNS ou IP du serveur MeOS.</small>
+      </div>
+      <div class="form-group">
+        <label for="serverPort">Port TCP</label>
+        <input type="serverPort" class="form-control" id="serverPort" placeholder="10000">
+      </div>
+      <div class="row">
+        <div class="col">
+          <h4>PyMesh</h4>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="loraFrequency">Fréquence LORA</label>
+        <select class="form-control" id="loraFrequency">
+          <option>863MHz</option>
+          <option>864MHz</option>
+          <option>865MHz</option>
+          <option>866MHz</option>
+          <option>867MHz</option>
+          <option>868MHz</option>
+          <option>869MHz</option>
+          <option>870MHz</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="loraSF">Fréquence LORA</label>
+        <select class="form-control" id="loraSF">
+          <option>SF7</option>
+          <option>SF8</option>
+          <option>SF9</option>
+          <option>SF10</option>
+          <option>SF11</option>
+          <option>SF12</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Enregistrer</button>
+    </form>
+  </div>
+
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="js/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+  <script src="js/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+</html>

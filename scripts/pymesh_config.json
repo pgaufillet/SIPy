@@ -1,0 +1,16 @@
+{
+  "ble_api": false,
+  "autostart": true,
+  "ble_name_prefix": "SILoRa ",
+  "debug": 5,
+  "LoRa": {
+    "sf": 7,
+    "region": 5,
+    "freq": 869500000,
+    "bandwidth": 2
+    },
+  "MAC": 0,
+  "Pymesh": {
+    "key": "3a5fea479bcc7b4ab619a84d57cf1022"
+    }
+  }
