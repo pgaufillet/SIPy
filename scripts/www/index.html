@@ -7,46 +7,27 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-
-    <title>WLAN scanner</title>
-    <script type="application/javascript">
-    function loadDoc() {
-      var xhttp = new XMLHttpRequest();
-      xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-          var wlans = JSON.parse(this.responseText);
-          var table = "<table class=\"table table-sm table-hover table-striped\"><tr><th scope=\"col\">SSID</th><th scope=\"col\">channel</th><th scope=\"col\">RSSI</th></tr>\n";
-          for (var n of wlans) {
-            table = table + "<tr><td>" + n.ssid + "</td><td>" + n.channel + "</td><td>" + n.rssi + "</td></tr>\n";
-          }
-          table = table + "</table>";
-          document.getElementById("networks").innerHTML = table;
-        }
-      };
-      // document.getElementById("networks").innerHTML = 'Scanning...';
-      xhttp.open("GET", "/wlan/scan", true);
-      xhttp.send();
-    }
-
-    window.setInterval(loadDoc, 20000);
-    </script>
+    <title>SIPy</title>
   </head>
-  <body onload="loadDoc()">
+  <body>
     <div class="container-fluid">
-		  <div class="row justify-content-md-center">
+      <div class="row justify-content-md-center">
 		    <div class="col-sm text-center">
-		        <h1>WLAN scanner</h1>
+		        <h1>SIPy</h1>
         </div>
       </div>
-      <div class="row justify-content-center">
-		    <div id="networks" class="col-md-auto table-responsive text-center"></div>
+      <div class="row justify-content-end">
+        <div class="col-sm">
+          <a href="config.html" type="button" class="btn btn-primary">Configuration</button>
+        </div>
+		    <div class="col-sm">
+          <a href="punches.html" type="button" class="btn btn-primary">Punches</button>
         </div>
       </div>
-      <!-- <div class="row">
-	        <div class="col text-center">
-            <button type="button" class="btn btn-primary" onclick="enableScan()">Scan</button>
-          </div>
-      </div> -->
+        <div class="col-sm">
+          <a href="" type="button" class="btn btn-primary">Network tools</button>
+        </div>
+      </div>
     </div>
 
     <!-- Optional JavaScript -->

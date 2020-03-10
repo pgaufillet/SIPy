@@ -7,13 +7,13 @@
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
-  <title>SRR LoPy configuration</title>
+  <title>SIPy configuration</title>
 </head>
 <body>
   <div class="container-fluid">
     <div class="row justify-content-md-center">
       <div class="col-sm text-center">
-        <h1>SRR LoPy configuration</h1>
+        <h1>SIPy configuration</h1>
       </div>
     </div>
     <div class="row">
@@ -23,6 +23,10 @@
     </div>
     <form>
       <div class="form-group">
+        <label for="hostname">Hostname</label>
+        <input type="text" class="form-control" id="hostname" placeholder="">
+      </div>
+      <div class="form-group">
         <label for="wifiMode">WiFi mode</label>
         <select class="form-control" id="wifiMode">
           <option>Access Point</option>
@@ -31,54 +35,25 @@
       </div>
       <div class="form-group">
         <label for="wifiSSID">WiFi SSID</label>
-        <input type="text" class="form-control" id="wifiSSID" placeholder="Nounette">
+        <input type="text" class="form-control" id="wifiSSID" placeholder="">
       </div>
       <div class="form-group">
         <label for="wifiPassword">WiFi SSID</label>
-        <input type="text" class="form-control" id="wifiPassword" placeholder="~vHff4uvJ}*C(7(n">
+        <input type="text" class="form-control" id="wifiPassword" placeholder="">
       </div>
       <div class="row">
         <div class="col">
-          <h4>Serveur MeOS</h4>
+          <h4>MeOS server</h4>
         </div>
       </div>
       <div class="form-group">
-        <label for="server">Adresse du serveur</label>
+        <label for="server">MeOS Server</label>
         <input type="text" class="form-control" id="server" aria-describedby="serverHelp">
-        <small id="serverHelp" class="form-text text-muted">Adresse DNS ou IP du serveur MeOS.</small>
+        <small id="serverHelp" class="form-text text-muted">Server hostname or IP address.</small>
       </div>
       <div class="form-group">
-        <label for="serverPort">Port TCP</label>
+        <label for="serverPort">TCP port</label>
         <input type="serverPort" class="form-control" id="serverPort" placeholder="10000">
-      </div>
-      <div class="row">
-        <div class="col">
-          <h4>PyMesh</h4>
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="loraFrequency">Fréquence LORA</label>
-        <select class="form-control" id="loraFrequency">
-          <option>863MHz</option>
-          <option>864MHz</option>
-          <option>865MHz</option>
-          <option>866MHz</option>
-          <option>867MHz</option>
-          <option>868MHz</option>
-          <option>869MHz</option>
-          <option>870MHz</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="loraSF">Fréquence LORA</label>
-        <select class="form-control" id="loraSF">
-          <option>SF7</option>
-          <option>SF8</option>
-          <option>SF9</option>
-          <option>SF10</option>
-          <option>SF11</option>
-          <option>SF12</option>
-        </select>
       </div>
       <button type="submit" class="btn btn-primary">Enregistrer</button>
     </form>

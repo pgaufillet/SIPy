@@ -8,39 +8,44 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
-    <title>SI punches</title>
+    <title>WLAN scanner</title>
     <script type="application/javascript">
-    function loadPunches() {
+    function loadDoc() {
       var xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-          var punches = JSON.parse(this.responseText);
-          var table = "<table class=\"table table-sm table-hover table-striped\"><tr><th scope=\"col\">Time</th><th scope=\"col\">SI-Card Number</th><th scope=\"col\">Station Code Number</th></tr>\n";
-          for (var p of punches) {
-            table = table + "<tr><td>" + p.time + "</td><td>" + p.SN + "</td><td>" + p.CN + "</td></tr>\n";
+          var wlans = JSON.parse(this.responseText);
+          var table = "<table class=\"table table-sm table-hover table-striped\"><tr><th scope=\"col\">SSID</th><th scope=\"col\">channel</th><th scope=\"col\">RSSI</th></tr>\n";
+          for (var n of wlans) {
+            table = table + "<tr><td>" + n.ssid + "</td><td>" + n.channel + "</td><td>" + n.rssi + "</td></tr>\n";
           }
           table = table + "</table>";
-          document.getElementById("punches").innerHTML = table;
+          document.getElementById("networks").innerHTML = table;
         }
       };
       // document.getElementById("networks").innerHTML = 'Scanning...';
-      xhttp.open("GET", "/sipy/punches", true);
+      xhttp.open("GET", "/wlan/scan", true);
       xhttp.send();
     }
 
-    window.setInterval(loadPunches, 10000);
+    window.setInterval(loadDoc, 20000);
     </script>
   </head>
-  <body onload="loadPunches()">
+  <body onload="loadDoc()">
     <div class="container-fluid">
 		  <div class="row justify-content-md-center">
 		    <div class="col-sm text-center">
-		        <h1>SI punches logbook</h1>
+		        <h1>WLAN scanner</h1>
         </div>
       </div>
       <div class="row justify-content-center">
-		    <div id="punches" class="col-md-auto table-responsive text-center"></div>
+		    <div id="networks" class="col-md-auto table-responsive text-center">O</div>
       </div>
+      <!-- <div class="row">
+	        <div class="col text-center">
+            <button type="button" class="btn btn-primary" onclick="enableScan()">Scan</button>
+          </div>
+      </div> -->
     </div>
 
     <!-- Optional JavaScript -->
