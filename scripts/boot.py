@@ -1,4 +1,4 @@
-#    SIPy - Meshed LoRa network for SportIdent SRR Orienteering stations 
+#    SIPy - Meshed LoRa network for SportIdent SRR Orienteering stations
 #           based on Pycom LoPy4
 #    Copyright (C) 2020  Pierre GAUFILLET
 #
@@ -25,12 +25,12 @@ pycom.heartbeat(False)
 pycom.rgbled(0x000800)
 wl = network.WLAN()
 wl.init(mode = network.WLAN.STA)
-wl.connect("Nounette", auth = (network.WLAN.WPA2, "~vHff4uvJ}*C(7(n"))
-while not wl.isconnected():
-    pass
+#wl.connect("", auth = (network.WLAN.WPA2, ""))
+#while not wl.isconnected():
+#    pass
 # synchronize RTC
-rtc = RTC()
-rtc.ntp_sync("pool.ntp.org")
+#rtc = RTC()
+#rtc.ntp_sync("pool.ntp.org")
 # Initialization fininshed
 pycom.rgbled(0)
 print(wl.ifconfig()[0]+"/"+wl.ifconfig()[1])
