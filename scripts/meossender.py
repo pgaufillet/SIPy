@@ -1,4 +1,4 @@
-#    SIPy - Meshed LoRa network for SportIdent SRR Orienteering stations 
+#    SIPy - Meshed LoRa network for SportIdent SRR Orienteering stations
 #           based on Pycom LoPy4
 #    Copyright (C) 2020  Pierre GAUFILLET
 #
@@ -18,7 +18,7 @@
 import utime
 import usocket
 import ubinascii
-import sireader
+import sipypacket
 
 # TCP packet expected by MeOS
 #
@@ -47,14 +47,14 @@ def meossender(punches, punches_lock, meosServer, meosPort):
                 meos_packet.append(0)
 
                 # Station number
-                meos_packet.append(punch[sireader.CN0])
-                meos_packet.append(punch[sireader.CN1])
+                meos_packet.append(punch[sipypacket.CN0])
+                meos_packet.append(punch[sipypacket.CN1])
 
                 # SIcard number
-                meos_packet.append(punch[sireader.SN0])
-                meos_packet.append(punch[sireader.SN1])
-                meos_packet.append(punch[sireader.SN2])
-                meos_packet.append(punch[sireader.SN3])
+                meos_packet.append(punch[sipypacket.SN0])
+                meos_packet.append(punch[sipypacket.SN1])
+                meos_packet.append(punch[sipypacket.SN2])
+                meos_packet.append(punch[sipypacket.SN3])
 
                 # Day (obsolete)
                 meos_packet.append(0)
@@ -63,13 +63,10 @@ def meossender(punches, punches_lock, meosServer, meosPort):
                 meos_packet.append(0)
 
                 # Time (in 1/10s)
-                time = int(((10 * punch[sireader.TSS]) >> 8) + 10 *
-                    (punch[sireader.TL] + (punch[sireader.TH] << 8) +
-                    ((punch[sireader.TD] & 0b00000001) * 43200)))
-                meos_packet.append(time & 0xff)
-                meos_packet.append((time >> 8) & 0xff)
-                meos_packet.append((time >> 16) & 0xff)
-                meos_packet.append((time >> 24) & 0xff)
+                meos_packet.append(sipypacket.TM0)
+                meos_packet.append(sipypacket.TM1)
+                meos_packet.append(sipypacket.TM2)
+                meos_packet.append(sipypacket.TM3)
 
                 print("[%02dh%02dm%02ds]" % utime.localtime()[3:6], "- meossender -", ubinascii.hexlify(meos_packet))
                 sock.sendall(meos_packet)

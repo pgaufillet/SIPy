@@ -1,4 +1,4 @@
-#    SIPy - Meshed LoRa network for SportIdent SRR Orienteering stations 
+#    SIPy - Meshed LoRa network for SportIdent SRR Orienteering stations
 #           based on Pycom LoPy4
 #    Copyright (C) 2020  Pierre GAUFILLET
 #
@@ -22,7 +22,7 @@ import socket
 import meshreceiver
 import utime
 import ubinascii
-import sireader
+import sipypacket
 from microWebSrv import MicroWebSrv
 from uartreader import uartReader
 from meshsender import meshsender
@@ -66,7 +66,7 @@ def wlanScanHandler(httpClient, httpResponse, routeArgs=None):
 def wlanScanHandler(httpClient, httpResponse, routeArgs=None):
     punches = []
     for p in punches_journal.array():
-        data = sireader.decode(p)
+        data = sipypacket.decode(p)
         punches.append({ 'time': "%02dh%02dm%02ds%003dms" % (data["h"], data["m"], data["s"], data["ms"]),
         'SN': data["SN"],
         'CN': data["CN"] })
