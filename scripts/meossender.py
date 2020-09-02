@@ -35,14 +35,11 @@ def meossender(punches, punches_lock, meosServer, meosPort):
         punches_lock.acquire(1)
         # Messages are available
         if len(punches) > 0:
-            sock = usocket.socket(usocket.AF_INET, usocket.SOCK_STREAM)
-            addr = usocket.getaddrinfo(meosServer, meosPort)[0][-1]
-            sock.connect(addr)
+            # Send message over TCP/IP to MeOs server
+            # Now you can use that address
+            meos_packet = bytearray()
             while len(punches) > 0:
                 punch = punches.popleft()
-                # Send message over TCP/IP to MeOs server
-                # Now you can use that address
-                meos_packet = bytearray()
                 # MeOS packet of punch type (O)
                 meos_packet.append(0)
 
@@ -68,6 +65,17 @@ def meossender(punches, punches_lock, meosServer, meosPort):
                 meos_packet.append(sipypacket.TM2)
                 meos_packet.append(sipypacket.TM3)
 
-                print("[%02dh%02dm%02ds]" % utime.localtime()[3:6], "- meossender -", ubinascii.hexlify(meos_packet))
-                sock.sendall(meos_packet)
-            sock.close()
+            retry = True
+            while retry:
+                try:
+                    sock = usocket.socket(usocket.AF_INET, usocket.SOCK_STREAM)
+                    addr = usocket.getaddrinfo(meosServer, meosPort)[0][-1]
+                    sock.settimeout(5)
+                    sock.connect(addr)
+                    sock.sendall(meos_packet)
+                    sock.close()
+                except OSError as msg:
+                    print("[%02dh%02dm%02ds]" % utime.localtime()[3:6], "- meossender -", "OS error: {0}".format(msg))
+                else:
+                    print("[%02dh%02dm%02ds]" % utime.localtime()[3:6], "- meossender -", ubinascii.hexlify(meos_packet))
+                    retry = False
