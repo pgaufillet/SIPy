@@ -60,10 +60,10 @@ def meossender(punches, punches_lock, meosServer, meosPort):
                 meos_packet.append(0)
 
                 # Time (in 1/10s)
-                meos_packet.append(sipypacket.TM0)
-                meos_packet.append(sipypacket.TM1)
-                meos_packet.append(sipypacket.TM2)
-                meos_packet.append(sipypacket.TM3)
+                meos_packet.append(punch[sipypacket.TM0])
+                meos_packet.append(punch[sipypacket.TM1])
+                meos_packet.append(punch[sipypacket.TM2])
+                meos_packet.append(punch[sipypacket.TM3])
 
             retry = True
             while retry:
