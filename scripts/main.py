@@ -45,15 +45,15 @@ default_config = {
                     "role": "leaf",
                     "known wifi": [
                                     {
-                                        "ssid": "Nounette",
+                                        "ssid": "STA_SSID",
                                         "auth": network.WLAN.WPA2,
-                                        "password": "-XY?3u6SEQmHjijdpRO5"
+                                        "password": "PASSWORD"
                                     }
                     ],
                     "owned wifi": {
-                        "ssid": "GEC",
+                        "ssid": "AP_SSID",
                         "auth mode": network.WLAN.WPA2,
-                        "password": "TOACOrientation3105"
+                        "password": "PASSWORD"
                     }
                  }
 
