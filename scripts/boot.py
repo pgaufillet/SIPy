@@ -17,20 +17,7 @@
 
 # boot.py -- run on boot-up
 
-import network
 import pycom
-from machine import RTC
 
 pycom.heartbeat(False)
 pycom.rgbled(0x000800)
-wl = network.WLAN()
-wl.init(mode = network.WLAN.STA)
-#wl.connect("", auth = (network.WLAN.WPA2, ""))
-#while not wl.isconnected():
-#    pass
-# synchronize RTC
-#rtc = RTC()
-#rtc.ntp_sync("pool.ntp.org")
-# Initialization fininshed
-pycom.rgbled(0)
-print(wl.ifconfig()[0]+"/"+wl.ifconfig()[1])

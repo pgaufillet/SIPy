@@ -18,17 +18,17 @@
 import network
 import ujson
 import _thread
-import socket
 import meshreceiver
 import utime
-import ubinascii
 import sipypacket
+from wlanmanager import wlanmanager
 from microWebSrv import MicroWebSrv
 from uartreader import uartReader
 from meshsender import meshsender
 from meossender import meossender
 from ucollections import deque
 from journal import Journal
+from configmgr import ConfigMgr
 
 try:
     from pymesh_config import PymeshConfig
@@ -40,12 +40,24 @@ try:
 except:
     from _pymesh import Pymesh
 
-roles = {
-#   0x240ac4c77738 : leaf
-    b'240ac4c74e5c': "leaf",
-#   0x240ac4c781c0 : border router
-    b'240ac4c781c0': "border router"
-}
+default_config = {
+                    "name": "A",
+                    "role": "leaf",
+                    "known wifi": [
+                                    {
+                                        "ssid": "Nounette",
+                                        "auth": network.WLAN.WPA2,
+                                        "password": "-XY?3u6SEQmHjijdpRO5"
+                                    }
+                    ],
+                    "owned wifi": {
+                        "ssid": "GEC",
+                        "auth mode": network.WLAN.WPA2,
+                        "password": "TOACOrientation3105"
+                    }
+                 }
+
+config = ConfigMgr(default = default_config)
 
 meosIp = "2020::1"
 punches_journal = Journal(10)
@@ -62,14 +74,26 @@ def wlanScanHandler(httpClient, httpResponse, routeArgs=None):
 								  contentCharset = "UTF-8",
 								  content 		 = wlans)
 
+@MicroWebSrv.route("/pymesh/monitor", "GET")
+def pymeshHandler(httpClient, httpResponse, routeArgs=None):
+    pn = pymesh.mesh.mesh.mesh.mesh.neighbors()
+    neighbours = [{ 'mac': pymesh.mac(), 'rssi': 0 }]
+    for node in pn:
+        neighbours.append({ 'mac': node.mac, 'rssi': node.rssi })
+    neighbours = ujson.dumps(neighbours)
+    httpResponse.WriteResponseOk( headers		 = None,
+								  contentType	 = "application/json",
+								  contentCharset = "UTF-8",
+								  content 		 = neighbours)
+
 @MicroWebSrv.route("/sipy/punches", "GET")
-def wlanScanHandler(httpClient, httpResponse, routeArgs=None):
+def punchesHandler(httpClient, httpResponse, routeArgs=None):
     punches = []
     for p in punches_journal.array():
         data = sipypacket.decode(p)
         punches.append({ 'time': "%02dh%02dm%02ds%003dms" % (data["h"], data["m"], data["s"], data["ms"]),
-        'SN': data["SN"],
-        'CN': data["CN"] })
+            'SN': data["SN"],
+            'CN': data["CN"] })
     punches.reverse()
     json_punches = ujson.dumps(punches)
     httpResponse.WriteResponseOk( headers		 = None,
@@ -81,9 +105,6 @@ srv = MicroWebSrv(webPath="www/")
 srv.SetNotFoundPageUrl("index.html")
 srv.Start(threaded=True)
 
-# Launch SRR reader thread
-role = roles[ubinascii.hexlify(wl.mac().sta_mac)]
-
 def dummy_cb(rcv_ip, rcv_port, rcv_data):
     #print('Incoming %d bytes from %s (port %d):' % (len(rcv_data), rcv_ip, rcv_port))
     print(rcv_data)
@@ -93,6 +114,10 @@ def border_router_loop():
     while True:
         pymesh.br_set(PymeshConfig.BR_PRIORITY_NORM, meshreceiver.siMessageCB)
         utime.sleep(60)
+
+# Configure Wifi - a local AP for stand alone mode using config parameters
+# Optionally connect as STA to a known WiFi
+_thread.start_new_thread(wlanmanager, (config,))
 
 # Initialize Pymesh as leaf
 
@@ -107,7 +132,6 @@ def border_router_loop():
 #     },
 #   "Pymesh": {"key": "50421ef968433195d49784d96f3bbb5b"}
 # }
-
 pymesh_config = PymeshConfig.read_config()
 pymesh = Pymesh(pymesh_config, dummy_cb)
 
@@ -115,8 +139,8 @@ pymesh = Pymesh(pymesh_config, dummy_cb)
 while not pymesh.is_connected():
     utime.sleep(1)
 
-if role == "leaf":
-    print("This node is a leaf")
+if config.get('role') == "leaf":
+    print("main - Starting as a leaf")
 
     # First create the shared lock
 
@@ -127,8 +151,8 @@ if role == "leaf":
     _thread.start_new_thread(uartReader, (punches, punches_journal, punches_lock))
     _thread.start_new_thread(meshsender, (punches, punches_lock, pymesh, meosIp))
 
-elif role == "border router":
-    print("This node is the border router")
+elif config.get('role') == "border router":
+    print("main - Starting as border router")
     # First create the shared lock
 
     punches_lock = _thread.allocate_lock()
