@@ -22,8 +22,8 @@ def wlanmanager(config):
     if config.has("owned wifi"):
         print('wlanmanager - Setting up WLAN ' + config.get("owned wifi")["ssid"] + "-" + config.get("name"))
         wl.init(mode = network.WLAN.STA_AP,
-            ssid=config.get("owned wifi")["ssid"] + "-" + config.get("name"),
-            auth=(network.WLAN.WPA2, config.get("owned wifi")["password"]))
+            ssid = config.get("owned wifi")["ssid"] + "-" + config.get("name"),
+            auth = (network.WLAN.WPA2, config.get("owned wifi")["password"]))
         utime.sleep(15)
     else:
         wl.init(mode = network.WLAN.STA)

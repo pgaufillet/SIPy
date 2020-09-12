@@ -30,7 +30,7 @@ import sipypacket
 #  DWORD CodeTime;  //Time
 #};
 
-def meossender(punches, punches_lock, meosServer, meosPort):
+def meossender(punches, punches_lock, config):
     while True:
         punches_lock.acquire(1)
         # Messages are available
@@ -69,7 +69,7 @@ def meossender(punches, punches_lock, meosServer, meosPort):
             while retry:
                 try:
                     sock = usocket.socket(usocket.AF_INET, usocket.SOCK_STREAM)
-                    addr = usocket.getaddrinfo(meosServer, meosPort)[0][-1]
+                    addr = usocket.getaddrinfo(config.get('meos')['address'], config.get('meos')['port'])[0][-1]
                     sock.settimeout(5)
                     sock.connect(addr)
                     sock.sendall(meos_packet)

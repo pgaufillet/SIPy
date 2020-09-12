@@ -40,6 +40,7 @@ try:
 except:
     from _pymesh import Pymesh
 
+# Use only one char for name (preferably A-Z to avoid confusion with SI controls).
 default_config = {
                     "name": "A",
                     "role": "leaf",
@@ -51,13 +52,21 @@ default_config = {
                                     }
                     ],
                     "owned wifi": {
-                        "ssid": "AP_SSID",
+                        "ssid": "GEC",
                         "auth mode": network.WLAN.WPA2,
                         "password": "PASSWORD"
+                    },
+                    "meos": {
+                    "address": "192.168.4.2",
+                    "port": "10000"
                     }
                  }
 
 config = ConfigMgr(default = default_config)
+
+# Configure Wifi - a local AP for stand alone mode using config parameters
+# Optionally connect as STA to a known WiFi
+_thread.start_new_thread(wlanmanager, (config,))
 
 meosIp = "2020::1"
 punches_journal = Journal(10)
@@ -101,23 +110,10 @@ def punchesHandler(httpClient, httpResponse, routeArgs=None):
 								  contentCharset = "UTF-8",
 								  content 		 = json_punches)
 
-srv = MicroWebSrv(webPath="www/")
-srv.SetNotFoundPageUrl("index.html")
-srv.Start(threaded=True)
-
 def dummy_cb(rcv_ip, rcv_port, rcv_data):
     #print('Incoming %d bytes from %s (port %d):' % (len(rcv_data), rcv_ip, rcv_port))
     print(rcv_data)
     return
-
-def border_router_loop():
-    while True:
-        pymesh.br_set(PymeshConfig.BR_PRIORITY_NORM, meshreceiver.siMessageCB)
-        utime.sleep(60)
-
-# Configure Wifi - a local AP for stand alone mode using config parameters
-# Optionally connect as STA to a known WiFi
-_thread.start_new_thread(wlanmanager, (config,))
 
 # Initialize Pymesh as leaf
 
@@ -164,4 +160,8 @@ elif config.get('role') == "border router":
     pymesh.br_set(PymeshConfig.BR_PRIORITY_NORM, mesh_receiver.siMessageCB)
 
     # Initialize TCP/IP relay
-    _thread.start_new_thread(meossender, (punches, punches_lock, "SERVER", 10000))
+    _thread.start_new_thread(meossender, (punches, punches_lock, config))
+
+srv = MicroWebSrv(webPath="www/")
+srv.SetNotFoundPageUrl("index.html")
+srv.Start(threaded=True)
