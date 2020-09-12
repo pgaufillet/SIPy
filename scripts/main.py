@@ -87,8 +87,9 @@ def wlanScanHandler(httpClient, httpResponse, routeArgs=None):
 def pymeshHandler(httpClient, httpResponse, routeArgs=None):
     pn = pymesh.mesh.mesh.mesh.mesh.neighbors()
     neighbours = [{ 'mac': pymesh.mac(), 'rssi': 0 }]
-    for node in pn:
-        neighbours.append({ 'mac': node.mac, 'rssi': node.rssi })
+    if pn != None:
+        for node in pn:
+            neighbours.append({ 'mac': node.mac, 'rssi': node.rssi })
     neighbours = ujson.dumps(neighbours)
     httpResponse.WriteResponseOk( headers		 = None,
 								  contentType	 = "application/json",
