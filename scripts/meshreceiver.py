@@ -1,4 +1,4 @@
-#    SIPy - Meshed LoRa network for SportIdent SRR Orienteering stations 
+#    SIPy - Meshed LoRa network for SportIdent SRR Orienteering stations
 #           based on Pycom LoPy4
 #    Copyright (C) 2020  Pierre GAUFILLET
 #
@@ -15,9 +15,9 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import sireader
 import utime
 import ubinascii
+
 
 class MeshReceiver:
     def __init__(self, journal, lock, punches):
@@ -26,7 +26,8 @@ class MeshReceiver:
         self.punches = punches
 
     def siMessageCB(self, rcv_ip, rcv_port, rcv_data, dest_ip, dest_port):
-        print("[%02dh%02dm%02ds]" % utime.localtime()[3:6], "- meshreceiver -", ubinascii.hexlify(rcv_data))
+        print("[%02dh%02dm%02ds]" % utime.localtime()[3:6],
+              "- meshreceiver -", ubinascii.hexlify(rcv_data))
         self.journal.append(rcv_data)
         self.punches.append(rcv_data)
         self.lock.release()

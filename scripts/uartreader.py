@@ -23,6 +23,7 @@ from machine import UART
 # Initializes UART for SI SRR OEM module
 uart = UART(1, baudrate=38400)
 
+
 def uartReader(punches, punches_journal, punches_lock):
     while True:
         # Sleep for 1s (other values don't work in a thread anyway)
@@ -41,9 +42,9 @@ def uartReader(punches, punches_journal, punches_lock):
             sipy_packet.append(buf[sireader.SN3])
 
             # Time (in 1/10s)
-            time = int(((10 * buf[sireader.TSS]) >> 8) + 10 *
-                (buf[sireader.TL] + (buf[sireader.TH] << 8) +
-                ((buf[sireader.TD] & 0b00000001) * 43200)))
+            time = int(((10 * buf[sireader.TSS]) >> 8) + 10
+                       * (buf[sireader.TL] + (buf[sireader.TH] << 8)
+                       + ((buf[sireader.TD] & 0b00000001) * 43200)))
             sipy_packet.append(time & 0xff)
             sipy_packet.append((time >> 8) & 0xff)
             sipy_packet.append((time >> 16) & 0xff)
@@ -52,7 +53,8 @@ def uartReader(punches, punches_journal, punches_lock):
             # Fill the message stack for PyMesh sender
             punches.append(sipy_packet)
             punches_journal.append(sipy_packet)
-            print("[%02dh%02dm%02ds]" % utime.localtime()[3:6], "- uartReader -", ubinascii.hexlify(sipy_packet))
+            print("[%02dh%02dm%02ds]" % utime.localtime()[3:6],
+                  "- uartReader -", ubinascii.hexlify(sipy_packet))
         # Now that the UART stream has no more complete messages, raise a mutex
         # to signal meshsender that it has to send them to the border router
         if punches_lock.locked():

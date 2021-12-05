@@ -17,6 +17,7 @@
 
 import ujson
 
+
 class ConfigMgr:
     def __init__(self, default = {}):
         self.load(default = default)

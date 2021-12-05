@@ -42,27 +42,27 @@ except:
 
 # Use only one char for name (preferably A-Z to avoid confusion with SI controls).
 default_config = {
-                    "name": "A",
-                    "role": "leaf",
-                    "known wifi": [
-                                    {
-                                        "ssid": "STA_SSID",
-                                        "auth": network.WLAN.WPA2,
-                                        "password": "PASSWORD"
-                                    }
-                    ],
-                    "owned wifi": {
-                        "ssid": "GEC",
-                        "auth mode": network.WLAN.WPA2,
-                        "password": "PASSWORD"
-                    },
-                    "meos": {
-                    "address": "192.168.4.2",
-                    "port": "10000"
-                    }
-                 }
+    "name": "A",
+    "role": "leaf",
+    "known wifi": [
+        {
+            "ssid": "STA_SSID",
+            "auth": network.WLAN.WPA2,
+            "password": "PASSWORD"
+        }
+    ],
+    "owned wifi": {
+        "ssid": "GEC",
+        "auth": network.WLAN.WPA2,
+        "password": "PASSWORD"
+    },
+    "meos": {
+        "address": "192.168.4.2",
+        "port": "10000"
+    }
+}
 
-config = ConfigMgr(default = default_config)
+config = ConfigMgr(default=default_config)
 
 # Configure Wifi - a local AP for stand alone mode using config parameters
 # Optionally connect as STA to a known WiFi
@@ -71,52 +71,57 @@ _thread.start_new_thread(wlanmanager, (config,))
 meosIp = "2020::1"
 punches_journal = Journal(10)
 
+
 @MicroWebSrv.route("/wlan/scan", "GET")
 def wlanScanHandler(httpClient, httpResponse, routeArgs=None):
     wl = network.WLAN()
     wlans = []
     for w in wl.scan():
-        wlans.append({ 'ssid': w.ssid, 'channel': w.channel, 'rssi': w.rssi })
+        wlans.append({'ssid': w.ssid, 'channel': w.channel, 'rssi': w.rssi})
     wlans = ujson.dumps(wlans)
-    httpResponse.WriteResponseOk( headers		 = None,
-								  contentType	 = "application/json",
-								  contentCharset = "UTF-8",
-								  content 		 = wlans)
+    httpResponse.WriteResponseOk(headers=None,
+                                 contentType="application/json",
+                                 contentCharset="UTF-8",
+                                 content=wlans)
+
 
 @MicroWebSrv.route("/pymesh/monitor", "GET")
 def pymeshHandler(httpClient, httpResponse, routeArgs=None):
     pn = pymesh.mesh.mesh.mesh.mesh.neighbors()
-    neighbours = [{ 'mac': pymesh.mac(), 'rssi': 0 }]
-    if pn != None:
+    neighbours = [{'mac': pymesh.mac(), 'rssi': 0}]
+    if pn is not None:
         for node in pn:
-            neighbours.append({ 'mac': node.mac, 'rssi': node.rssi })
+            neighbours.append({'mac': node.mac, 'rssi': node.rssi})
     neighbours = ujson.dumps(neighbours)
-    httpResponse.WriteResponseOk( headers		 = None,
-								  contentType	 = "application/json",
-								  contentCharset = "UTF-8",
-								  content 		 = neighbours)
+    httpResponse.WriteResponseOk(headers=None,
+                                 contentType="application/json",
+                                 contentCharset="UTF-8",
+                                 content=neighbours)
+
 
 @MicroWebSrv.route("/sipy/punches", "GET")
 def punchesHandler(httpClient, httpResponse, routeArgs=None):
     punches = []
     for p in punches_journal.array():
         data = sipypacket.decode(p)
-        punches.append({ 'time': "%02dh%02dm%02ds%003dms" % (data["h"], data["m"], data["s"], data["ms"]),
-            'SN': data["SN"],
-            'CN': data["CN"] })
+        punches.append({'time': "%02dh%02dm%02ds%003dms" % (data["h"], data["m"], data["s"], data["ms"]),
+                        'SN': data["SN"],
+                        'CN': data["CN"]})
     punches.reverse()
     json_punches = ujson.dumps(punches)
-    httpResponse.WriteResponseOk( headers		 = None,
-								  contentType	 = "application/json",
-								  contentCharset = "UTF-8",
-								  content 		 = json_punches)
+    httpResponse.WriteResponseOk(headers=None,
+                                 contentType="application/json",
+                                 contentCharset="UTF-8",
+                                 content=json_punches)
+
 
 def dummy_cb(rcv_ip, rcv_port, rcv_data):
-    #print('Incoming %d bytes from %s (port %d):' % (len(rcv_data), rcv_ip, rcv_port))
+    # print('Incoming %d bytes from %s (port %d):' % (len(rcv_data), rcv_ip, rcv_port))
     print(rcv_data)
     return
 
 # Initialize Pymesh as leaf
+
 
 # LoRa config for France 500mW on band 54 (869,4-869,65MHz)
 # {
@@ -145,8 +150,10 @@ if config.get('role') == "leaf":
     # Crate the list of message from UART SRR to PyMesh
     punches = deque((), 200)
 
-    _thread.start_new_thread(uartReader, (punches, punches_journal, punches_lock))
-    _thread.start_new_thread(meshsender, (punches, punches_lock, pymesh, meosIp))
+    _thread.start_new_thread(
+        uartReader, (punches, punches_journal, punches_lock))
+    _thread.start_new_thread(
+        meshsender, (punches, punches_lock, pymesh, meosIp))
 
 elif config.get('role') == "border router":
     print("main - Starting as border router")
@@ -157,7 +164,8 @@ elif config.get('role') == "border router":
     punches = deque((), 200)
 
     # Initialize Pymesh as boder router
-    mesh_receiver = meshreceiver.MeshReceiver(punches_journal, punches_lock, punches)
+    mesh_receiver = meshreceiver.MeshReceiver(
+        punches_journal, punches_lock, punches)
     pymesh.br_set(PymeshConfig.BR_PRIORITY_NORM, mesh_receiver.siMessageCB)
 
     # Initialize TCP/IP relay

@@ -1,4 +1,4 @@
-#    SIPy - Meshed LoRa network for SportIdent SRR Orienteering stations 
+#    SIPy - Meshed LoRa network for SportIdent SRR Orienteering stations
 #           based on Pycom LoPy4
 #    Copyright (C) 2020  Pierre GAUFILLET
 #
@@ -47,6 +47,7 @@ MEM1 = 15
 MEM0 = 16
 CRC1 = 17
 CRC0 = 18
+
 
 def decode(buf):
     """Decode the frame and store it into a dictionary."""

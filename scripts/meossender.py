@@ -22,13 +22,14 @@ import sipypacket
 
 # TCP packet expected by MeOS
 #
-#struct SIOnlinePunch {
+# struct SIOnlinePunch {
 #  BYTE Type;  //0=punch, 255=Triggered time
 #  WORD CodeNo;  //2 byte 0-65K (station code)
 #  DWORD SICardNo; //4 byte integer  -2GB until +2GB
 #  DWORD CodeDay; //Obsolete, not used anymore
 #  DWORD CodeTime;  //Time
-#};
+# };
+
 
 def meossender(punches, punches_lock, config):
     while True:
@@ -69,13 +70,16 @@ def meossender(punches, punches_lock, config):
             while retry:
                 try:
                     sock = usocket.socket(usocket.AF_INET, usocket.SOCK_STREAM)
-                    addr = usocket.getaddrinfo(config.get('meos')['address'], config.get('meos')['port'])[0][-1]
+                    addr = usocket.getaddrinfo(config.get(
+                        'meos')['address'], config.get('meos')['port'])[0][-1]
                     sock.settimeout(5)
                     sock.connect(addr)
                     sock.sendall(meos_packet)
                     sock.close()
                 except OSError as msg:
-                    print("[%02dh%02dm%02ds]" % utime.localtime()[3:6], "- meossender -", "OS error: {0}".format(msg))
+                    print("[%02dh%02dm%02ds]" % utime.localtime()[3:6],
+                          "- meossender -", "OS error: {0}".format(msg))
                 else:
-                    print("[%02dh%02dm%02ds]" % utime.localtime()[3:6], "- meossender -", ubinascii.hexlify(meos_packet))
+                    print("[%02dh%02dm%02ds]" % utime.localtime()[3:6],
+                          "- meossender -", ubinascii.hexlify(meos_packet))
                     retry = False

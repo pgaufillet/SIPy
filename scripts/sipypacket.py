@@ -17,25 +17,27 @@
 
 # Index of SIPy packet fields
 # Station number
-CN0  = 0
-CN1  = 1
+CN0 = 0
+CN1 = 1
 # SIcard number
-SN0  = 2
-SN1  = 3
-SN2  = 4
-SN3  = 5
+SN0 = 2
+SN1 = 3
+SN2 = 4
+SN3 = 5
 # Time (in 1/10s)
-TM0  = 6
-TM1  = 7
-TM2  = 8
-TM3  = 9
+TM0 = 6
+TM1 = 7
+TM2 = 8
+TM3 = 9
+
 
 def decode(buf):
     """Decode the frame and store it into a dictionary."""
     data = {}
 
     # Station Id
-    data["SN"] = buf[SN0] + (buf[SN1] << 8) + (buf[SN2] << 16) + (buf[SN3] << 24)
+    data["SN"] = buf[SN0] + (buf[SN1] << 8) + \
+        (buf[SN2] << 16) + (buf[SN3] << 24)
 
     # Card Id
     data["CN"] = buf[CN0] + (buf[CN1] << 8)

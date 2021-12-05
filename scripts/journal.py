@@ -1,4 +1,4 @@
-#    SIPy - Meshed LoRa network for SportIdent SRR Orienteering stations 
+#    SIPy - Meshed LoRa network for SportIdent SRR Orienteering stations
 #           based on Pycom LoPy4
 #    Copyright (C) 2020  Pierre GAUFILLET
 #
@@ -18,6 +18,7 @@
 class Journal:
     """This class if a simple LIFO array supporting a maximum of size elements.
     """
+
     def __init__(self, size):
         self.journal = []
         self.size = size

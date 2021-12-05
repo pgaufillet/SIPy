@@ -1,4 +1,4 @@
-#    SIPy - Meshed LoRa network for SportIdent SRR Orienteering stations 
+#    SIPy - Meshed LoRa network for SportIdent SRR Orienteering stations
 #           based on Pycom LoPy4
 #    Copyright (C) 2020  Pierre GAUFILLET
 #

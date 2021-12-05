@@ -17,16 +17,19 @@
 import network
 import utime
 
+
 def wlanmanager(config):
     wl = network.WLAN()
     if config.has("owned wifi"):
-        print('wlanmanager - Setting up WLAN ' + config.get("owned wifi")["ssid"] + "-" + config.get("name"))
-        wl.init(mode = network.WLAN.STA_AP,
-            ssid = config.get("owned wifi")["ssid"] + "-" + config.get("name"),
-            auth = (network.WLAN.WPA2, config.get("owned wifi")["password"]))
+        print('wlanmanager - Setting up WLAN ' + config.get("owned wifi")
+              ["ssid"] + "-" + config.get("name"))
+        wl.init(mode=network.WLAN.STA_AP,
+                ssid=config.get("owned wifi")[
+                                "ssid"] + "-" + config.get("name"),
+                auth=(network.WLAN.WPA2, config.get("owned wifi")["password"]))
         utime.sleep(15)
     else:
-        wl.init(mode = network.WLAN.STA)
+        wl.init(mode=network.WLAN.STA)
     while True:
         try:
             if not wl.isconnected():
@@ -39,9 +42,11 @@ def wlanmanager(config):
                     if kw['ssid'] in wnames:
                         selected_wifi = kw
                         break
-                if selected_wifi != None:
-                    print("wlanmanager - Connecting to " + selected_wifi['ssid'])
-                    wl.connect(selected_wifi['ssid'], auth = (selected_wifi['auth'], selected_wifi['password']))
+                if selected_wifi is not None:
+                    print("wlanmanager - Connecting to "
+                          + selected_wifi['ssid'])
+                    wl.connect(selected_wifi['ssid'], auth=(
+                        selected_wifi['auth'], selected_wifi['password']))
         except:
             print("wlanmanager - Failure")
         utime.sleep(60)
