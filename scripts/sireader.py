@@ -20,28 +20,28 @@
 """This class provides helpers to encode/decode Data Record Transmission
 frames used for SRR punches."""
 # SI Protocol tags
-STX                       = b'\x02'
-ETX                       = b'\x03'
-DLE                       = b'\x10'
-NAK                       = b'\x15'
-WAKEUP                    = b'\xFF'
+STX = b'\x02'
+ETX = b'\x03'
+DLE = b'\x10'
+NAK = b'\x15'
+WAKEUP = b'\xFF'
 
 # Data record transmission used as command code for SRR punch read
-DATA_RECORD_TRANSMISSION  = b'\xD3'
+DATA_RECORD_TRANSMISSION = b'\xD3'
 
 # Index of bytes in Data record transmission frames (20 bytes including the
 # 0xFF header)
-LEN  = 3
-CN1  = 4
-CN0  = 5
-SN3  = 6
-SN2  = 7
-SN1  = 8
-SN0  = 9
-TD   = 10
-TH   = 11
-TL   = 12
-TSS  = 13
+LEN = 3
+CN1 = 4
+CN0 = 5
+SN3 = 6
+SN2 = 7
+SN1 = 8
+SN0 = 9
+TD = 10
+TH = 11
+TL = 12
+TSS = 13
 MEM2 = 14
 MEM1 = 15
 MEM0 = 16
@@ -54,7 +54,8 @@ def decode(buf):
     data = {}
 
     # Station Id
-    data["SN"] = buf[SN0] + (buf[SN1] << 8) + (buf[SN2] << 16) + (buf[SN3] << 24)
+    data["SN"] = buf[SN0] + (buf[SN1] << 8) + \
+        (buf[SN2] << 16) + (buf[SN3] << 24)
 
     # Card Id
     data["CN"] = buf[CN0] + (buf[CN1] << 8)

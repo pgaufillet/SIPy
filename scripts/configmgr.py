@@ -19,10 +19,10 @@ import ujson
 
 
 class ConfigMgr:
-    def __init__(self, default = {}):
-        self.load(default = default)
+    def __init__(self, default={}):
+        self.load(default=default)
 
-    def reset(self, default = {}):
+    def reset(self, default={}):
         self.config = default.copy()
         self.save()
 
@@ -38,7 +38,7 @@ class ConfigMgr:
     def has(self, key):
         return key in self.config
 
-    def load(self, default = {}):
+    def load(self, default={}):
         try:
             with open('config.json') as f:
                 self.config = ujson.load(f)

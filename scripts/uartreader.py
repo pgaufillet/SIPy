@@ -44,7 +44,7 @@ def uartReader(punches, punches_journal, punches_lock):
             # Time (in 1/10s)
             time = int(((10 * buf[sireader.TSS]) >> 8) + 10
                        * (buf[sireader.TL] + (buf[sireader.TH] << 8)
-                       + ((buf[sireader.TD] & 0b00000001) * 43200)))
+                          + ((buf[sireader.TD] & 0b00000001) * 43200)))
             sipy_packet.append(time & 0xff)
             sipy_packet.append((time >> 8) & 0xff)
             sipy_packet.append((time >> 16) & 0xff)

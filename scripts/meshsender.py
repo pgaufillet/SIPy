@@ -18,6 +18,7 @@
 import utime
 import ubinascii
 
+
 def meshsender(punches, punches_lock, pymesh, meosIp):
     while True:
         punches_lock.acquire(1)
@@ -25,7 +26,8 @@ def meshsender(punches, punches_lock, pymesh, meosIp):
         while len(punches) > 0:
             punch = punches.popleft()
             # Send message over PyMesh
-            print("[%02dh%02dm%02ds]" % utime.localtime()[3:6], "- meshsender -", ubinascii.hexlify(punch))
+            print("[%02dh%02dm%02ds]" % utime.localtime()[3:6],
+                  "- meshsender -", ubinascii.hexlify(punch))
             pymesh.send_mess_external(meosIp, 10000, punch)
             # Work around utime.sleep(x) bug which sleeps for 1s whatever
             # the value of x is
