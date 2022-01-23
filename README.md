@@ -53,17 +53,17 @@ relaying them to MeOS.
 
 Leafs and router nevertheless share the same software. During the boot, different
 parts are activated depending on the local configuration:
-* on the leafs, the thread _uartReader_ in charge of the link to the SportIdent radio is started.
+* on the leafs, the thread __uartReader__ in charge of the link to the SportIdent radio is started.
 It decodes the message and assemble a SIPy LoRa packet. Then it stores it in a
-stack and it signals it using _punches_lock_ to the thread _meshsender_ in charge of LoRa emission.
-* on the router, the thread _mesh_receiver.siMessageCB_ is in charge of receiving the LoRa messages. It decodes
-it and assemble a SportIdent packet. It then signals it using _punches_lock_ to the thread _meossender_ in
+stack and it signals it using __punches_lock__ to the thread __meshsender__ in charge of LoRa emission.
+* on the router, the thread __mesh_receiver.siMessageCB__ is in charge of receiving the LoRa messages. It decodes
+it and assemble a SportIdent packet. It then signals it using __punches_lock__ to the thread __meossender__ in
 charge of WLAN messages. This last thread opens a UDP socket to MeOS and send
 the punch packet.
 
 2 more threads run on all nodes:
 * a thread in charge of WLAN management: it scans continuously the local WLAN,
-and connect to it if it matches the _known wifi_ configuration parameter. If
+and connect to it if it matches the __known wifi__ configuration parameter. If
 not, the node switches to WLAN Access Point mode and broadcasts it.
 * a thread in charge of the HTTP management: this web access is solely used
 for diagnostic and administration purposes.
