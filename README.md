@@ -43,6 +43,31 @@ Node administration
 The admnistration web pages can be accessed once on the same network that the node,
 with any web browser at [http://\<node ip address\>]().
 
+Architecture
+------------
+
+SIPy nodes can be of 2 types:
+* __Leaf__: general case. Leaf nodes read punches and send them to the router.
+* __router__: only one router in the network, receiving punches from leaf and
+relaying them to MeOS.
+
+Leafs and router nevertheless share the same software. During the boot, different
+parts are activated depending on the local configuration:
+* on the leafs, the thread _uartReader_ in charge of the link to the SportIdent radio is started.
+It decodes the message and assemble a SIPy LoRa packet. Then it stores it in a
+stack and it signals it using _punches_lock_ to the thread _meshsender_ in charge of LoRa emission.
+* on the router, the thread _mesh_receiver.siMessageCB_ is in charge of receiving the LoRa messages. It decodes
+it and assemble a SportIdent packet. It then signals it using _punches_lock_ to the thread _meossender_ in
+charge of WLAN messages. This last thread opens a UDP socket to MeOS and send
+the punch packet.
+
+2 more threads run on all nodes:
+* a thread in charge of WLAN management: it scans continuously the local WLAN,
+and connect to it if it matches the _known wifi_ configuration parameter. If
+not, the node switches to WLAN Access Point mode and broadcasts it.
+* a thread in charge of the HTTP management: this web access is solely used
+for diagnostic and administration purposes.
+
 Technical notes
 ---------------
 * Never, __NEVER__ start a Pycom module without its LoRa antenna: there are good
@@ -61,6 +86,15 @@ chances to burn out the radio amplifier.
 
  In normal operations, only one node shall be magenta, all the other are green or
  white, depending on the number of nodes.
+
+ This behaviour can be disabled as described by Catalin in the Pycom forum
+ <https://forum.pycom.io/topic/6337/pymesh-and-rgb-led/3>:
+ ```
+ For now, the solution is to comment-out this line: https://github.com/pycom/pycom-libraries/blob/1df042c6faf032d40c48a647cb6d158d94304d23/pymesh/pymesh_frozen/lib/mesh_internal.py#L265
+Basically, the method led_state controls the LED.
+So, you should take the file mesh_internal.py modify it (comment out that line) and upload it on the device. This module/file will be used, as it has higher priority than the one included in the frozen, as binary.
+Let me know how it goes.
+```
 
 * From Pycom 1.20.2r2+, Pymesh can only be provisioned from Pybytes (<https://pybytes.pycom.io>).
 Once provisioned, the way Pymesh is configured is altered and the board uses Pybytes data.
